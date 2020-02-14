@@ -1,5 +1,5 @@
 #include "Snake.h"
-
+#include <mutex>
 Snake::Snake()
 {
 	this->_len = 0;
@@ -26,7 +26,7 @@ Snake::~Snake()
 	}
 }
 
-bool Snake::move(char** table, int& score,int size)//, bool grow)
+bool Snake::move(char** table, int& score,int size,std::condition_variable& foodCond)//, bool grow)
 {
 	Pos pre;
 	bool cond = true;
@@ -46,17 +46,22 @@ bool Snake::move(char** table, int& score,int size)//, bool grow)
 		{
 			cond = false;
 		}
+		//TODO:suitable for one only
 		eaten = eaten || (cond && table[after.getX()][after.getY()] == EAT_KEY);
 		//put in table
+		table[pre.getX()][pre.getY()] = ' ';
 		table[after.getX()][after.getY()] = PART_KEY;
 	}
 	if (eaten)
 	{
 		score += 5;
-		Cube lastCube = this->_parts[this->_len - 1];
-		Pos last =lastCube.GetPos();
-		direction dir= last.getX() > pre.getX() ? direction::RIGHT : last.getX() < pre.getX() ? direction::LEFT : last.getY() > pre.getY() ? direction::UP : direction::DOWN;
-		this->_parts.push_back(Cube(pre, lastCube, dir));
+		Cube lastPosCube = this->_parts[this->_len - 1];
+		Pos lastPos =lastPosCube.GetPos();
+		direction dir= lastPos.getX() > pre.getX() ? direction::UP : lastPos.getX() < pre.getX() ? direction::DOWN : lastPos.getY() > pre.getY() ? direction::RIGHT : direction::LEFT;
+		this->_parts.push_back(Cube(pre, lastPosCube, dir));
+		table[pre.getX()][pre.getY()] = PART_KEY;
+		this->_len++;
+		foodCond.notify_one();
 	}
 	return cond;
 }

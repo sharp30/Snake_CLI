@@ -4,12 +4,12 @@
 #include <vector>
 #include "Cube.h"
 #include "Position.h"
-
+#include <mutex>
 using std::vector;
 
 
 const char PART_KEY = '5';
-const char EAT_KEY = 'o';
+const char EAT_KEY = '4';
 class Snake
 {
 public:
@@ -17,8 +17,7 @@ public:
 	Snake(char**& table, int size, direction startDir);
 	~Snake();
 
-
-	bool move(char** table, int& score, int size);
+	bool move(char** table, int& score, int size, std::condition_variable& foodCond);
 	int getLength() const;
 	void addDir(direction dir);
 private:

@@ -1,16 +1,18 @@
 #include "Game.h"
 #include <thread>
 #include <iostream>
+#include <time.h>
+#include <cstdlib>
 
 Game::Game(const int tableSize): _tableSize(tableSize)
 {
-	
+	srand(time(NULL));
 	this->_board = new char*[_tableSize];
 	for (int i = 0; i < _tableSize; i++)
 	{
 		this->_board[i] = new char[_tableSize];
 	}
-	
+	this->_dir = direction::UP;
 	this->_score = 0;
 
 }
@@ -21,12 +23,21 @@ int Game::playGame()
 
 	this->initial();
 
-	std::thread t = std::thread(&Game::getInput, this);
+	std::thread tInput = std::thread(&Game::getInput, this);
+	tInput.detach();
+	std::thread tPrint = std::thread(&Game::printBoard, this);
+	tPrint.detach();
+	std::thread tFood = std::thread(&Game::placeFood, this);
+	tFood.detach();
 	while (this->_game)
 	{
-		this->_snake.addDir(this->_dir);
-		this->_game = this->_snake.move(this->_board, this->_score,this->_tableSize);
-		std::this_thread::sleep_for(std::chrono::seconds(2));
+		{
+			std::lock_guard<std::mutex> l(this->_keyMutex);
+			this->_snake.addDir(this->_dir);
+		}
+		this->_game = this->_snake.move(this->_board, this->_score,this->_tableSize,this->_placeFoodCond);
+		this->_printBoardCond.notify_one();
+		std::this_thread::sleep_for(std::chrono::milliseconds(1500));
 	}
 	return this->_score;
 }
@@ -41,6 +52,27 @@ Game::~Game()
 	this->_score = 0;
 }
 
+void Game::placeFood()
+{
+	while (true)
+	{
+		std::unique_lock<std::mutex> l(this->_boardMutex);
+		bool placed = false;
+		while (!placed)
+		{
+			Pos pos(rand() % this->_tableSize, rand() % this->_tableSize);
+			if (this->_board[pos.getX()][pos.getY()] == ' ')
+			{
+				this->_board[pos.getX()][pos.getY()] = EAT_KEY;
+				placed = true;
+			}
+		}
+		//this->_printBoardCond.notify_one();
+		//TO DO: FIX THIS FUCK OF CODE 
+		this->_placeFoodCond.wait(l);
+	}
+}
+
 void Game::printBoard()
 {
 	while (true)
@@ -52,7 +84,7 @@ void Game::printBoard()
 		{
 			for (size_t i = 0; i < _tableSize; i++)
 			{
-				cout << '_';
+				cout << " _ ";
 			}
 			cout << std::endl;
 
@@ -62,20 +94,14 @@ void Game::printBoard()
 				cout << this->_board[row][col];
 				cout << '|';
 			}
-
 			cout << std::endl;
-
-		}
-		for (size_t i = 0; i < _tableSize; i++)
-		{
-			cout << '_';
 		}
 	}
-
 }
 
 void Game::getInput()
 {
+	const int values[] = { 75, 72, 77, 80 };
 	while (true)
 	{
 		while (!_kbhit())
@@ -83,9 +109,18 @@ void Game::getInput()
 
 		}
 		char key = _getch();
-		if (key >= 37 && key <= 40)
+		for (size_t i = 0; i < 4; i++)
 		{
-			this->_dir = direction(key - 37);
+			if(key == values[i])
+			{
+				{
+					std::lock_guard<std::mutex> l(this->_keyMutex);
+
+					this->_dir = direction(i);
+					
+				}
+				break;
+			}
 		}
 	}
 }

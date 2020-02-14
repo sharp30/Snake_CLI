@@ -22,7 +22,8 @@ void Pos::Move(direction dir)
 		this->_x++;
 		break;
 	case direction::DOWN:
-		this->_x--;	
+		this->_x--;
+		break;
 	case direction::RIGHT:
 		this->_y++;
 		break;

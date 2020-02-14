@@ -3,13 +3,14 @@
 enum class direction
 {
 	LEFT,
-	UP,
+	DOWN,
 	RIGHT,
-	DOWN
+	UP
 };
 
 class Pos
 {
+
 public:
 	Pos();
 	Pos(int x, int y);
@@ -20,6 +21,7 @@ public:
 	int getY() const;
 	void setX(int x);
 	void setY(int y);
+
 private:
 	int _x;
 	int _y;
