@@ -5,7 +5,7 @@ Snake::Snake()
 	this->_len = 0;
 }
 
-Snake::Snake(char**& table, int size,int startDir)
+Snake::Snake(char**& table, int size,direction startDir)
 {
 	this->_len = size;
 	Pos first(0,size-1);
@@ -13,7 +13,7 @@ Snake::Snake(char**& table, int size,int startDir)
 	{
 		this->_parts.push_back(Cube(first, startDir, i + 1));
 		table[first.getX()][first.getY()] = PART_KEY;
-		first.Move(LEFT);
+		first.Move(direction::LEFT);
 	}
 }
 
@@ -55,7 +55,7 @@ bool Snake::move(char** table, int& score,int size)//, bool grow)
 		score += 5;
 		Cube lastCube = this->_parts[i - 1];
 		Pos last =lastCube.GetPos();
-		int dir= last.getX() > pre.getX() ? RIGHT : last.getX() < pre.getX() ? LEFT : last.getY() > pre.getY() ? UP : DOWN;
+		direction dir= last.getX() > pre.getX() ? direction::RIGHT : last.getX() < pre.getX() ? direction::LEFT : last.getY() > pre.getY() ? direction::UP : direction::DOWN;
 		this->_parts.push_back(Cube(pre, lastCube, dir));
 	}
 	return cond;
@@ -66,7 +66,7 @@ int Snake::getLength() const
 	return this->_len;
 }
 
-void Snake::addDir(int dir)
+void Snake::addDir(direction dir)
 {
 	for (size_t i = 0; i < this->_parts.size(); i++)
 	{

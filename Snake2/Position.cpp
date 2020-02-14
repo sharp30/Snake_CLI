@@ -14,19 +14,19 @@ Pos::Pos(int x, int y)
 
 Pos::~Pos() = default;
 
-void Pos::Move(int dir)
+void Pos::Move(direction dir)
 {
 	switch (dir)
 	{
-	case UP:
+	case direction::UP:
 		this->_x++;
 		break;
-	case DOWN:
+	case direction::DOWN:
 		this->_x--;	
-	case RIGHT:
+	case direction::RIGHT:
 		this->_y++;
 		break;
-	case LEFT:
+	case direction::LEFT:
 		this->_y--;
 		break;
 	default:

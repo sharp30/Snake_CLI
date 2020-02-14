@@ -8,9 +8,10 @@ Cube::Cube()
 
 Cube::Cube(Pos start) :_pos(start)
 {
+
 }
 
-Cube::Cube(Pos start, int dir, int cnt):_pos(start)
+Cube::Cube(Pos start, direction dir, int cnt):_pos(start)
 {
 	for (size_t i = 0; i < cnt; i++)
 	{
@@ -18,9 +19,9 @@ Cube::Cube(Pos start, int dir, int cnt):_pos(start)
 	}
 }
 
-Cube::Cube(Pos start, const Cube& other, int last):_pos(start)
+Cube::Cube(Pos start, const Cube& other, direction last):_pos(start)
 {
-	std::queue<int> temp;
+	std::queue<direction> temp;
 	while (!this->_aheadMoves.empty())
 	{
 		temp.emplace(this->_aheadMoves.front());
@@ -57,7 +58,7 @@ Pos Cube::GetPos() const
 	return this->_pos;
 }
 
-void Cube::AddMove(int dir)
+void Cube::AddMove(direction dir)
 {
 	this->_aheadMoves.push(dir);
 }

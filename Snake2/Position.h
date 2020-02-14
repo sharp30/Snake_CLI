@@ -1,12 +1,12 @@
 #pragma once
 
-typedef enum direction
+enum class direction
 {
-	LEFT = 0,
+	LEFT,
 	UP,
 	RIGHT,
 	DOWN
-}direction;
+};
 
 class Pos
 {
@@ -15,7 +15,7 @@ public:
 	Pos(int x, int y);
 	~Pos();
 
-	void Move(int dir);
+	void Move(direction dir);
 	int getX() const;
 	int getY() const;
 	void setX(int x);

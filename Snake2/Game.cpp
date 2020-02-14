@@ -102,6 +102,6 @@ void Game::initial()
 			this->_board[row][col] = ' ';
 		}
 	}
-	this->_dir = RIGHT;
+	this->_dir = direction::RIGHT;
 	this->_snake = Snake(this->_board,_tableSize > 8? 4:_tableSize/2,this->_dir);
 }

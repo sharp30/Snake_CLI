@@ -28,7 +28,7 @@ private:
 	char** _board;
 	Snake _snake;
 	int _score;
-	int _dir;
+	direction _dir;
 	bool _game;
 	const int _tableSize;
 };

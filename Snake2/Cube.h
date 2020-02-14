@@ -11,16 +11,16 @@ class Cube
 public:
 	Cube();
 	Cube(Pos start);
-	Cube(Pos start, int dir, int cnt);
-	Cube(Pos start, const Cube& other, int last);
+	Cube(Pos start, direction dir, int cnt);
+	Cube(Pos start, const Cube& other, direction last);
 	~Cube();
 	void Move();
 	void SetPos(Pos other);
 	Pos GetPos() const;
-	void AddMove(int dir);
+	void AddMove(direction dir);
 
 
 private:
 	Pos _pos;
-	queue<int> _aheadMoves;
+	queue<direction> _aheadMoves;
 };

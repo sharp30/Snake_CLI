@@ -14,13 +14,13 @@ class Snake
 {
 public:
 	Snake();
-	Snake(char**& table, int size, int startDir);
+	Snake(char**& table, int size, direction startDir);
 	~Snake();
 
 
 	bool move(char** table, int& score, int size);
 	int getLength() const;
-	void addDir(int dir);
+	void addDir(direction dir);
 private:
 	vector<Cube> _parts;
 	int _len;
