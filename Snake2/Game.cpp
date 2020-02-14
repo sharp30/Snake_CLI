@@ -8,7 +8,7 @@ Game::Game(const int tableSize): _tableSize(tableSize)
 	this->_board = new char*[_tableSize];
 	for (int i = 0; i < _tableSize; i++)
 	{
-		this->_board[i] = new char[i];
+		this->_board[i] = new char[_tableSize];
 	}
 	
 	this->_score = 0;
@@ -85,7 +85,7 @@ void Game::getInput()
 		char key = _getch();
 		if (key >= 37 && key <= 40)
 		{
-			this->_dir = int(key - 37);
+			this->_dir = direction(key - 37);
 		}
 	}
 }

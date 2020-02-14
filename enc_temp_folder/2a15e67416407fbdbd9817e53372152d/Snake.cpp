@@ -53,7 +53,7 @@ bool Snake::move(char** table, int& score,int size)//, bool grow)
 	if (eaten)
 	{
 		score += 5;
-		Cube lastCube = this->_parts[this->_len - 1];
+		Cube lastCube = this->_parts[i - 1];
 		Pos last =lastCube.GetPos();
 		direction dir= last.getX() > pre.getX() ? direction::RIGHT : last.getX() < pre.getX() ? direction::LEFT : last.getY() > pre.getY() ? direction::UP : direction::DOWN;
 		this->_parts.push_back(Cube(pre, lastCube, dir));
