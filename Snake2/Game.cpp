@@ -3,6 +3,8 @@
 #include <iostream>
 #include <time.h>
 #include <cstdlib>
+#include <conio.h>
+#include <Windows.h>
 
 Game::Game(const int tableSize): _tableSize(tableSize)
 {
@@ -37,7 +39,7 @@ int Game::playGame()
 		}
 		this->_game = this->_snake.move(this->_board, this->_score,this->_tableSize,this->_placeFoodCond);
 		this->_printBoardCond.notify_one();
-		std::this_thread::sleep_for(std::chrono::milliseconds(1500));
+		std::this_thread::sleep_for(std::chrono::milliseconds(800));
 	}
 	return this->_score;
 }
@@ -72,6 +74,17 @@ void Game::placeFood()
 		this->_placeFoodCond.wait(l);
 	}
 }
+void clearScreen()
+{
+	HANDLE hOut;
+	COORD Position;
+
+	hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	Position.X = 0;
+	Position.Y = 0;
+	SetConsoleCursorPosition(hOut, Position);
+}
 
 void Game::printBoard()
 {
@@ -79,7 +92,8 @@ void Game::printBoard()
 	{
 		std::unique_lock<std::mutex> l(this->_boardMutex);
 		this->_printBoardCond.wait(l);
-		system("cls");
+		clearScreen();
+		cout << "			SCORE:	" << this->_score << std::endl << std::endl;
 		for (int row = 0; row < this->_tableSize; row++)
 		{
 			for (size_t i = 0; i < _tableSize; i++)

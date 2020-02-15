@@ -21,16 +21,12 @@ Cube::Cube(Pos start, direction dir, int cnt):_pos(start)
 
 Cube::Cube(Pos start, const Cube& other, direction last):_pos(start)
 {
-	std::queue<direction> temp;
-	while (!this->_aheadMoves.empty())
-	{
-		temp.emplace(this->_aheadMoves.front());
-		this->_aheadMoves.pop();
-	}
+	std::queue<direction> temp = other._aheadMoves;
 	this->AddMove(last);
 	while (!temp.empty())
 	{
 		this->AddMove(temp.front());
+		temp.pop();
 	}
 }
 

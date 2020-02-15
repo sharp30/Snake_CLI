@@ -5,8 +5,10 @@
 #include "Game.h"
 int main()
 {
-    Game x(10);
-    x.playGame();
+    Game x(12);
+    int score = x.playGame();
+    system("cls");
+    std::cout << "SCORE:    " << score << std::endl;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
