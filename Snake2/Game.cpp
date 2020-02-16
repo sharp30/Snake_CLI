@@ -169,9 +169,10 @@ void Game::getInput()
 			{
 				{
 					std::lock_guard<std::mutex> l(this->_keyMutex);
-
-					this->_dir = direction(i);
-					
+					if ((int)this->_dir % 2 != i % 2)
+					{
+						this->_dir = direction(i);
+					}
 				}
 				break;
 			}
