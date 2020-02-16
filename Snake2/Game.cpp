@@ -58,8 +58,8 @@ Game::~Game()
 void Game::chooseLevel()
 {
 	cout << "Please Choose your level : " << std::endl;
-	int chose = 0;
-	while (chose < level::EASY|| chose > level::IMPOSSIBLE)
+	int choice = 0;
+	while (choice < level::EASY|| choice > level::IMPOSSIBLE)
 	{
 
 		cout << "Easy - press "<<level::EASY << std::endl;
@@ -67,9 +67,9 @@ void Game::chooseLevel()
 		cout << "Hard - press " << level::HARD<<std::endl;
 		cout << "Legendery - press " << level::LEGENDERY<<std::endl;
 		cout << "Impossible - press " <<level::IMPOSSIBLE <<std::endl;
-		std::cin >> chose;
+		std::cin >> choice;
 	}
-	switch (chose)
+	switch (choice)
 	{
 	case level::EASY:
 		this->_speed = speed::EASY;
