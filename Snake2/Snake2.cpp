@@ -4,15 +4,23 @@
 #include <iostream>
 #include "Game.h"
 #include <Windows.h>
+
+const char PLAY = 'y';
 int main()
 {
     Game x(20);
-   // system("mode 650");4
+    // system("mode 650");4
     SetConsoleDisplayMode(GetStdHandle(STD_OUTPUT_HANDLE), CONSOLE_FULLSCREEN_MODE, 0);
-    std::cin.ignore();    
-    int score = x.playGame();
-    system("cls");
-    std::cout << "SCORE:    " << score << std::endl;
+    std::cin.ignore();
+    char choice = PLAY;
+    while (choice == PLAY)
+    {
+        int score = x.playGame();
+        system("cls");
+        std::cout << "SCORE:    " << score << std::endl;
+        cout << "Would you like to play again? ( enter y for yes)" << std::endl;
+        std::cin>> choice;
+    }
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
