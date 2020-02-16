@@ -16,7 +16,7 @@ Game::Game(const int tableSize): _tableSize(tableSize)
 	}
 	this->_dir = direction::UP;
 	this->_score = 0;
-
+	this->_speed = speed::EASY;
 }
 
 int Game::playGame()
@@ -28,7 +28,6 @@ int Game::playGame()
 	std::thread tInput = std::thread(&Game::getInput, this);
 	tInput.detach();
 	std::thread tPrint = std::thread(&Game::printBoard, this);
-	tPrint.detach();
 	std::thread tFood = std::thread(&Game::placeFood, this);
 	tFood.detach();
 	while (this->_game)
@@ -39,8 +38,10 @@ int Game::playGame()
 		}
 		this->_game = this->_snake.move(this->_board, this->_score,this->_tableSize,this->_placeFoodCond);
 		this->_printBoardCond.notify_one();
-		std::this_thread::sleep_for(std::chrono::milliseconds(800));
+		std::this_thread::sleep_for(std::chrono::milliseconds((int)this->_speed));
 	}
+	tPrint.join();
+
 	return this->_score;
 }
 
@@ -52,6 +53,43 @@ Game::~Game()
 	}
 	free(_board);
 	this->_score = 0;
+}
+
+void Game::chooseLevel()
+{
+	cout << "Please Choose your level : " << std::endl;
+	int chose = 0;
+	while (chose < level::EASY|| chose > level::IMPOSSIBLE)
+	{
+
+		cout << "Easy - press "<<level::EASY << std::endl;
+		cout << "Medium - press " <<level::MEDIUM<< std::endl;
+		cout << "Hard - press " << level::HARD<<std::endl;
+		cout << "Legendery - press " << level::LEGENDERY<<std::endl;
+		cout << "Impossible - press " <<level::IMPOSSIBLE <<std::endl;
+		std::cin >> chose;
+	}
+	switch (chose)
+	{
+	case level::EASY:
+		this->_speed = speed::EASY;
+		break;
+	case level::MEDIUM:
+		this->_speed = speed::MEDIUM;
+		break;
+	case level::HARD:
+		this->_speed = speed::HARD;
+		break;
+	case level::LEGENDERY:
+		this->_speed = speed::LEGENDERY;
+		break;
+	case level::IMPOSSIBLE:
+		this->_speed = speed::IMPOSSIBLE;
+		break;
+	default:
+		break;
+	}
+	system("cls");
 }
 
 void Game::placeFood()
@@ -88,7 +126,7 @@ void clearScreen()
 
 void Game::printBoard()
 {
-	while (true)
+	while (this->_game)
 	{
 		std::unique_lock<std::mutex> l(this->_boardMutex);
 		this->_printBoardCond.wait(l);
@@ -153,4 +191,6 @@ void Game::initial()
 	}
 	this->_dir = direction::RIGHT;
 	this->_snake = Snake(this->_board,_tableSize > 8? 4:_tableSize/2,this->_dir);
+
+	this->chooseLevel();
 }

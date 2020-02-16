@@ -3,16 +3,20 @@
 
 #include <iostream>
 #include "Game.h"
+#include <Windows.h>
 int main()
 {
-    Game x(12);
+    Game x(20);
+   // system("mode 650");4
+    SetConsoleDisplayMode(GetStdHandle(STD_OUTPUT_HANDLE), CONSOLE_FULLSCREEN_MODE, 0);
+    std::cin.ignore();    
     int score = x.playGame();
     system("cls");
     std::cout << "SCORE:    " << score << std::endl;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
+// Debug program: F5 or Debug > Start Debugging menus
 
 // Tips for Getting Started: 
 //   1. Use the Solution Explorer window to add/manage files
