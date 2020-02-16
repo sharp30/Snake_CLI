@@ -36,8 +36,10 @@ int Game::playGame()
 			std::lock_guard<std::mutex> l(this->_keyMutex);
 			this->_snake.addDir(this->_dir);
 		}
+
 		this->_game = this->_snake.move(this->_board, this->_score,this->_tableSize,this->_placeFoodCond);
 		this->_printBoardCond.notify_one();
+		
 		std::this_thread::sleep_for(std::chrono::milliseconds((int)this->_speed));
 	}
 	tPrint.join();

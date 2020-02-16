@@ -18,8 +18,8 @@ namespace level
 
 enum class speed
 {
-	EASY = 300,
-	MEDIUM =150,
+	EASY = 800,
+	MEDIUM =400,
 	HARD = 100,
 	LEGENDERY = 50,
 	IMPOSSIBLE =20
